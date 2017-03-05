@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="en" ng-app="eventsApp" ng-controller="mainCtrl">
+<head>
+  <meta charset="utf-8">
+  <title>Google Calendar Events</title>
+
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="style/site.css" rel="stylesheet" />
+    <link href="style/treeGrid.css" rel="stylesheet" />
+</head>
+<body>
+    <div>
+
+
+        <div class="main">
+            <div class="container-fluid">
+                <div ng-show="currentUser">
+                    <h1>You're authenticated!</h1>
+                    Logged in as {{currentUser.displayName}}
+                </div>
+                <div>
+                    <button class="btn btn-success" ng-click="login()">Login</button>
+                    <select class="form-control" name="calendar" ng-model="selectedCalendar" ng-options="cal as cal.summary for cal in calendars"></select>
+                    <button class="btn btn-success" ng-click="loadCalendars()">Get Calendars</button>
+                    <button class="btn btn-success" ng-click="loadEvents()">Get Calendar Entries</button>
+                </div>
+                <!--<ul class="list-group">
+                    <li class="list-group-item" ng-repeat="item in calendarItems">{{item.summary}}</li>
+                </ul>-->
+                <div ng-show="!showMinDir">
+                    <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handlerCV(branch)" expand-level="1" icon-expand="glyphicon glyphicon-chevron-right" icon-collapse="glyphicon glyphicon-chevron-down" icon-leaf="glyphicon glyphicon-globe"></tree-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="scripts/angular.js"></script>
+    <script src="scripts/angular-googleapi.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
+    <script src="scripts/tree-grid-directive.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="scripts/moment.min.js"></script>
+    <!-- Load app main script -->
+    <script src="app/app.js?v=2"></script>
+    <script src="app/controllers/mainController.js"></script>
+
+</body>
+</html>

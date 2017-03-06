@@ -5,12 +5,12 @@
   <title>Google Calendar Events</title>
 
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+   <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
     <link href="style/site.css" rel="stylesheet" />
     <link href="style/treeGrid.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 <body>
-    <div>
-
 
         <div class="main">
             <div class="container-fluid">
@@ -30,16 +30,147 @@
                 <div ng-show="!showMinDir">
                     <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handlerCV(branch)" expand-level="1" icon-expand="glyphicon glyphicon-chevron-right" icon-collapse="glyphicon glyphicon-chevron-down" icon-leaf="glyphicon glyphicon-globe"></tree-grid>
                 </div>
+
+                <div id="viewEventModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog">
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Event details</h4>
+                            </div>
+
+                            <form name="viewEventForm" role="form">
+                                <div class="modal-body">
+                                    <!--Title-->
+                                    <div class="form-group row">
+                                        <label for="title" class="col-xs-2 col-form-label">Title</label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" id="title" type="text" value="" readonly ng-model="event.summary">
+                                        </div>
+                                    </div>
+                                    <!--Creator-->
+                                    <div class="form-group row">
+                                        <label for="creator" class="col-xs-2 col-form-label">Event creator</label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" id="creator" readonly ng-model="event.creator"></input>
+                                        </div>
+                                    </div>
+
+                                    <!--Description-->
+                                    <div class="form-group row">
+                                        <label for="description" class="col-xs-2 col-form-label">Description</label>
+                                        <div class="col-xs-10">
+                                           <textarea class="form-control" id="description" rows="3" readonly ng-model="event.description"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!--Links-->
+                                   <!-- <div class="form-group row" data-ng-repeat="link in links" ng-hide="{{links[0].URL === undefined}}">
+                                        <label for="links" ng-show="$first" class="col-xs-2 col-form-label">Links</label>
+                                        <label class="col-xs-2 col-form-label" ng-show="$index>0"></label>
+                                        <div class="col-xs-10">
+                                            <label>Link {{$index+1}}</label>
+                                            <input type="url" class="form-control" ng-model="link.URL" name="" placeholder="Enter link here" readonly>
+                                            <input type="text" class="form-control" ng-model="link.DESCRIPTION" name="" readonly placeholder="Enter description here">
+                                        </div>
+                                    </div>-->
+                                    <!--StartDate-->
+                                    <div class="form-group row">
+                                        <label for="datetimepickerStart" class="col-xs-2 col-form-label">Starts on<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event starts.'></i></label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" type="text" value="" ng-model="event.startDateTime" readonly>
+                                            <!--<div class="form-group">
+                                                <div class='input-group date' id='datetimepickerStart'>
+                                                    <input type='text' class="form-control" ng-model="event.startDateTime"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                    <!--EndDate-->
+                                    <div class="form-group row">
+                                        <label for="endDateTime" class="col-xs-2 col-form-label">Ends on<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event ends.'></i></label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" type="text" value="" ng-model="event.endDateTime" readonly>
+                                        </div>
+                                    </div>
+                                    <!--Location-->
+                                    <div class="form-group row">
+                                        <label for="location" class="col-xs-2 col-form-label">Location<i class='glyphicon glyphicon-pushpin' data-toggle='tooltip' title='Event location.'></i></label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" id="location" type="text" value="" ng-model="event.location" readonly>
+                                        </div>
+                                    </div>
+                                    <!--Created-->
+                                    <div class="form-group row">
+                                        <label for="created" class="col-xs-2 col-form-label">Created<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event creation date.'></i></label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" id="created" type="text" value="" ng-model="event.created" readonly>
+                                        </div>
+                                    </div>
+                                    <!--Updated-->
+                                    <div class="form-group row">
+                                        <label for="updated" class="col-xs-2 col-form-label">Updated<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event updated.'></i></label>
+                                        <div class="col-xs-10">
+                                            <input class="form-control" id="updated" type="text" value="" ng-model="event.updated" readonly>
+                                        </div>
+                                    </div>
+                                    <!--Attachments-->
+                                    <div class="form-group row"  data-ng-repeat="attachment in event.attachments" ng-hide="{{event.attachments=== undefined}}">
+                                        <label for="attachments" ng-show="$first" class="col-xs-2 col-form-label">Links</label>
+                                        <label class="col-xs-2 col-form-label" ng-show="$index>0"></label>
+                                        <div class="col-xs-10">
+                                            <label>Attachment {{$index+1}}</label>
+                                            <input type="text" class="form-control" ng-model="attachment.title" name="" placeholder="Attachment title" readonly>
+                                            <input type="url" class="form-control" ng-model="attachment.fileUrl" name="" placeholder="Attachment url" readonly>
+                                        </div>
+                                    </div>       
+                                    <!--Html Link-->
+                                    <div class="form-group row">
+                                        <label for="htmlLink" class="col-xs-2 col-form-label">Event link<i class='glyphicon glyphicon-link' data-toggle='tooltip' title='Event link.'></i></label>
+                                        <div class="col-xs-10">
+                                            <a id="htmlLink" ng-href="{{event.htmlLink}}">Event URL</a>
+                                        </div>
+                                    </div>
+                                
+                                </div>
+                            </form>
+                            <div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                     
+
+                        <style>
+                           
+                        </style>
+
+                    </div>
+                </div>
+
+
             </div>
+          
         </div>
-    </div>
+    <script type="text/javascript">
+            $(function () {
+                $('#datetimepickerStart').datetimepicker();
+            });
+    </script>
     <script src="scripts/angular.js"></script>
     <script src="scripts/angular-googleapi.js"></script>
     <script src="https://apis.google.com/js/client.js"></script>
     <script src="scripts/tree-grid-directive.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+ 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+   
     <!-- Load app main script -->
     <script src="app/app.js?v=2"></script>
     <script src="app/controllers/mainController.js"></script>

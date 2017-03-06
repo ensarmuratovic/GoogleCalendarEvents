@@ -58,10 +58,10 @@
         {
             field: "Actions",
             displayName: "Actions",
-            cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewCrModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editCrModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delCrModal'  >Delete</button>",
+            cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delEventModal'  >Delete</button>",
             cellTemplateScope: {
-                clickEdit: function (branch) {
-                    /* $scope.editCr = branch;
+                /* clickEdit: function (branch) {
+                     $scope.editCr = branch;
                      $scope.filterString = "";
                      console.log(branch.links);
                      if (branch.links.length > 0) {
@@ -79,19 +79,20 @@
                          console.log($scope.editCriteriaFull.name);
                      });
 
-                 },
-                 clickDel: function (branch) {
+                 },*/
+                 /*clickDel: function (branch) {
                      $scope.delCr = branch;
                      myCvService.GetCriteria(branch.criteria_id).then(function (response) {
                          $scope.delCriteriaFull = response.data;
                          $scope.delCriteria = $scope.editCriteriaFull.name;
                          console.log($scope.editCriteriaFull.name);
                      });
-                 },
+                 },*/
                  clickView: function (branch) {
 
-                     $scope.viewCr = branch;
-                     if (branch.links.length > 0) {
+                     $scope.event = branch;
+                     console.log(branch);
+                     /*if (branch.links.length > 0) {
                          $scope.links = [];
                      }
                      else {
@@ -104,8 +105,8 @@
                          $scope.viewCriteriaFull = response.data;
                          $scope.viewCriteria = $scope.viewCriteriaFull.name;
                          console.log($scope.viewCriteriaFull.name);
-                     });
-                     */
+                     });*/
+                    
                 }
             }
         }
@@ -124,7 +125,7 @@
 
          $scope.$on("google:ready", function() {
          //to allow authorization after google api is loaded 
-          //googleLogin.login();
+          googleLogin.login();
           });
         
         $scope.currentUser = googleLogin.currentUser;
@@ -135,7 +136,7 @@
                 .then(function (events) {
                  //   $scope.calendarItems = events;
                     //  console.log(events);
-                    var data = events;
+                    //var data = events;
                     for(var i=0;i<events.length;i++)
                     {
                         var event = {
@@ -143,16 +144,38 @@
                             creator: "",
                             startDateTime: "",
                             endDateTime: "",
+                            created: "",
+                            updated:"",
                             description: "",
-                            location:""
+                            location: "",
+                            attachments: [],
+                            htmlLink:""
                         }
-                        event.summary = data[i].summary;
-                        event.creator = data[i].creator.displayName;
-                        event.startDateTime = moment(data[i].start.dateTime).format('MMMM Do YYYY, h:mm:ss a');
-                        event.endDateTime = moment(data[i].end.dateTime).format('MMMM Do YYYY, h:mm:ss a');
-                        event.description = data[i].description;
-                        event.location = data[i].location;
-                        console.log(event);
+                        event.summary = events[i].summary;
+                        event.creator = events[i].creator.displayName;
+                        event.startDateTime = moment(events[i].start.dateTime).format('MM/DD/YYYY h:mm A');
+                       // event.startDateTime = events[i].start.dateTime;
+                      
+                        event.endDateTime = moment(events[i].end.dateTime).format('MM/DD/YYYY h:mm A');
+                        event.created = moment(events[i].created).format('MM/DD/YYYY h:mm A');
+                        event.updated = moment(events[i].updated).format('MM/DD/YYYY h:mm A');
+
+                       // console.log(moment(event.created).format());
+                       // console.log(events[i].created);
+                        event.description = events[i].description;
+                        event.location = events[i].location;
+                        event.htmlLink = events[i].htmlLink;
+                        
+                        if (events[i].attachments) {
+                            for (var j = 0; j < events[i].attachments.length; j++)
+                                event.attachments.push({
+                                    title: events[i].attachments[j].title,
+                                    fileUrl: events[i].attachments[j].fileUrl,
+                                    iconLink: events[i].attachments[j].iconLink
+                                });
+                            console.log(event.attachments);
+                        }
+                        console.log(events[i]);
                         myTreeData.push(event);
                     }
                     $scope.tree_data=myTreeData;

@@ -1,5 +1,5 @@
  'use strict';
- app.controller('mainCtrl', ['$scope', 'googleLogin', 'googleCalendar', 'googlePlus', function ($scope, googleLogin, googleCalendar, googlePlus) {
+ app.controller('mainCtrl', ['$scope', 'googleLogin', 'googleCalendar', 'googlePlus', 'cfpLoadingBar', function ($scope, googleLogin, googleCalendar, googlePlus, cfpLoadingBar) {
     
 
  
@@ -7,7 +7,7 @@
  
      var myTreeData = new Array();
 
-  
+     
 
      $scope.expanding_property = {
          field: "summary",
@@ -83,7 +83,7 @@
          $scope.$on("google:ready", function() {
          //authorization after google api is loaded 
              googleLogin.login().then(function (data) {
-                 
+                 cfpLoadingBar.complete();
              });
           });
         
@@ -98,6 +98,7 @@
         }
         $scope.loadEvents = function () {
             clearTable();
+            cfpLoadingBar.start();
              googleCalendar.listEvents({ calendarId: this.selectedCalendar.id })
                 .then(function (events) {
                  //   $scope.calendarItems = events;
@@ -152,7 +153,8 @@
                         //console.log(events[i]);
                         myTreeData.push(event);
                     }
-                    $scope.tree_data=myTreeData;
+                    $scope.tree_data = myTreeData;
+                    cfpLoadingBar.complete();
 
                      }
                 );

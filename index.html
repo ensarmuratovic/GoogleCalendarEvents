@@ -1,5 +1,5 @@
 ﻿<!doctype html>
-<html lang="en" ng-app="eventsApp" ng-controller="mainCtrl">
+<html lang="en" >
 <head>
   <meta charset="utf-8">
   <title>Google Calendar Events</title>
@@ -8,12 +8,12 @@
    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
     <link href="style/site.css" rel="stylesheet" />
     <link href="style/treeGrid.css" rel="stylesheet" />
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
+    <link href="style/customLoadinBar.css" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
-<body>
+<body ng-app="eventsApp" ng-controller="mainCtrl" >
 
-    <div class="main">
+    <div class="main ng-cloak" ng-cloak>
         <div>
             <button class="btn btn-success" ng-show="!currentUser" ng-click="login()" style="position:fixed; top:50%; left:50%; width:100px;margin-left:-50px;">Login</button>
         </div>
@@ -266,6 +266,7 @@
             $('#datetimepickerEnd').datetimepicker();
         });
     </script>
+
     <script src="scripts/angular.js"></script>
     <script src="scripts/angular-googleapi.js"></script>
     <script src="https://apis.google.com/js/client.js"></script>
@@ -274,12 +275,13 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular-animate.min.js"></script>
-    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+
+   
     <!-- Load app main script -->
     <script src="app/app.js?v=2"></script>
     <script src="app/controllers/mainController.js"></script>
-
+    <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
+ 
 </body>
 
 

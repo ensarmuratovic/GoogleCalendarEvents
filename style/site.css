@@ -243,3 +243,7 @@ input.form-search:focus{
     background-color: #eee;
     opacity: 1;
 }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-    ng-cloak {
+    display: none !important;
+}

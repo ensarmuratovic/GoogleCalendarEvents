@@ -1,4 +1,4 @@
-var app = angular.module('eventsApp', ["googleApi", 'treeGrid']);
+var app = angular.module('eventsApp', ["googleApi", 'treeGrid', 'angular-loading-bar','ngAnimate']);
 
 app.config(function(googleLoginProvider) {
     googleLoginProvider.configure({
@@ -8,3 +8,4 @@ app.config(function(googleLoginProvider) {
         	     "https://www.googleapis.com/auth/plus.login"]
     });
 });
+

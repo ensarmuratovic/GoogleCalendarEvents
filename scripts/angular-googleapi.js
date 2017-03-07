@@ -55,7 +55,6 @@ angular.module('googleApi', [])
                         var data = {};
                         $rootScope.$broadcast("google:authenticated", authResult);
                         googleApiBuilder.runClientLoadedCallbacks();
-                        console.log(authResult);
                         deferred.resolve(data);
                     } else {
                         deferred.reject(authResult.error);
@@ -115,7 +114,6 @@ angular.module('googleApi', [])
 						gapi.client.load('plus', 'v1', function() {
 							self.getPeople = googleApiBuilder.build(gapi.client.plus.people.get);
                             self.listPeople = googleApiBuilder.build(gapi.client.plus.people.list);
-                            console.log(self.getPeople);
 							self.getCurrentUser = function() {
 								return self.getPeople({userId: "me"});
 							}

@@ -108,19 +108,23 @@
 
 table.tree-grid {
 	max-height : 500px;
+    min-width:100px;
 	overflow-y : scroll;
+   
 }
 
 table.tree-grid>tbody>tr>td {
-	max-height : 500px;
+	max-height:200px;
 	overflow-y : auto;
-    max-width: 50px;
+    max-width:200px;
     overflow-x:auto;    
     border-left-width:thin;
-    border-left-style:solid;
     border-left-color:lightgray;
-    font-size:x-small;
-    padding:3px;
+    font-size:small   ;
+    padding:10px;
+}
+table.tree-grid>tbody>tr>th{
+    width:300px;
 }
 table.tree-grid>tbody>tr:nth-child(2n+1){
     background-color:rgb(244, 252, 255);

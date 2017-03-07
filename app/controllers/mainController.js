@@ -18,19 +18,13 @@
      };
      $scope.col_defs = [
         {
-            field: "creator",
-            displayName: "Creator",
+            field: "htmlLink",
+            displayName: "Event link",
             sortable: true,
-            sortingType: "string"
-        },
-       /* {
-            field: "link",
-            displayName: "Attachment link",
-            sortable: true,
-            cellTemplate: "<span ng-switch='row.branch[col.field]'><a ng-switch-when='undefined'>No Attachment</a><a ng-switch-default ng-href='{{row.branch[col.field]}}'>Download</a></span>",
+            cellTemplate: "<span ng-switch='row.branch[col.field]'><a ng-switch-default ng-href='{{row.branch[col.field]}}'>URL</a></span>",
             sortingType: "number",
             filterable: true
-        },*/
+        },
         {
             field: "startDateTime",
             displayName: "Starts on",
@@ -40,12 +34,6 @@
         {
             field: "endDateTime",
             displayName: "Ends on",
-            sortable: true,
-            sortingType: "string"
-        },
-        {
-            field: "description",
-            displayName: "Event Description",
             sortable: true,
             sortingType: "string"
         },
@@ -60,26 +48,9 @@
             displayName: "Actions",
             cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delEventModal'  >Delete</button>",
             cellTemplateScope: {
-                /* clickEdit: function (branch) {
-                     $scope.editCr = branch;
-                     $scope.filterString = "";
-                     console.log(branch.links);
-                     if (branch.links.length > 0) {
-                         $scope.links = [];
-                     }
-                     else {
-                         $scope.links = [{ DESCRIPTION: '', URL: '' }];
-                     }
-                     for (var i = 0; i < branch.links.length; i++) {
-                         $scope.links.push({ DESCRIPTION: branch.links[i].description, URL: branch.links[i].url });
-                     }
-                     myCvService.GetCriteria(branch.criteria_id).then(function (response) {
-                         $scope.editCriteriaFull = response.data;
-                         $scope.editCriteria = $scope.editCriteriaFull.name;
-                         console.log($scope.editCriteriaFull.name);
-                     });
-
-                 },*/
+                 clickEdit: function (data) {
+                     $scope.event = data;
+                 },
                  /*clickDel: function (branch) {
                      $scope.delCr = branch;
                      myCvService.GetCriteria(branch.criteria_id).then(function (response) {
@@ -88,25 +59,10 @@
                          console.log($scope.editCriteriaFull.name);
                      });
                  },*/
-                 clickView: function (branch) {
+                 clickView: function (data) {
 
-                     $scope.event = branch;
-                     console.log(branch);
-                     /*if (branch.links.length > 0) {
-                         $scope.links = [];
-                     }
-                     else {
-                         $scope.links = [];
-                     }
-                     for (var i = 0; i < branch.links.length; i++) {
-                         $scope.links.push({ DESCRIPTION: branch.links[i].description, URL: branch.links[i].url });
-                     }
-                     myCvService.GetCriteria(branch.criteria_id).then(function (response) {
-                         $scope.viewCriteriaFull = response.data;
-                         $scope.viewCriteria = $scope.viewCriteriaFull.name;
-                         console.log($scope.viewCriteriaFull.name);
-                     });*/
-                    
+                     $scope.event = data;
+                     console.log(data); 
                 }
             }
         }
@@ -117,19 +73,29 @@
 
         $scope.$on("googlePlus:loaded", function() {
           googlePlus.getCurrentUser().then(function(user) {
-            $scope.currentUser = user;
+              $scope.currentUser = user;
+              $scope.currentUser.image.url
             console.log(user);
-
+            $scope.loadCalendars();
           });
         })
 
          $scope.$on("google:ready", function() {
-         //to allow authorization after google api is loaded 
-          googleLogin.login();
+         //authorization after google api is loaded 
+             googleLogin.login().then(function (data) {
+                 
+             });
           });
         
-        $scope.currentUser = googleLogin.currentUser;
+         $scope.currentUser = googleLogin.currentUser;
 
+        $scope.loadCalendars = function () {
+            googleCalendar.listCalendars().then(function (data) {
+                $scope.calendars = data;
+                $scope.selectedCalendar = $scope.calendars[0];
+                $scope.loadEvents();
+            });
+        }
         $scope.loadEvents = function () {
             clearTable();
              googleCalendar.listEvents({ calendarId: this.selectedCalendar.id })
@@ -139,7 +105,9 @@
                     //var data = events;
                     for(var i=0;i<events.length;i++)
                     {
+                        console.log(events[i]);
                         var event = {
+                            id:"",
                             summary: "",
                             creator: "",
                             startDateTime: "",
@@ -151,12 +119,18 @@
                             attachments: [],
                             htmlLink:""
                         }
+                        event.id = events[i].id;
                         event.summary = events[i].summary;
                         event.creator = events[i].creator.displayName;
-                        event.startDateTime = moment(events[i].start.dateTime).format('MM/DD/YYYY h:mm A');
-                       // event.startDateTime = events[i].start.dateTime;
-                      
-                        event.endDateTime = moment(events[i].end.dateTime).format('MM/DD/YYYY h:mm A');
+                        //for all-day events
+                        if (events[i].end.dateTime)
+                            event.startDateTime = moment(events[i].start.dateTime).format('MM/DD/YYYY h:mm A');
+                        else
+                            event.startDateTime = moment(events[i].start.date).format('MM/DD/YYYY');
+                        if(events[i].end.dateTime)
+                            event.endDateTime = moment(events[i].end.dateTime).format('MM/DD/YYYY h:mm A');
+                        else
+                            event.endDateTime = moment(events[i].end.date).format('MM/DD/YYYY');
                         event.created = moment(events[i].created).format('MM/DD/YYYY h:mm A');
                         event.updated = moment(events[i].updated).format('MM/DD/YYYY h:mm A');
 
@@ -173,9 +147,9 @@
                                     fileUrl: events[i].attachments[j].fileUrl,
                                     iconLink: events[i].attachments[j].iconLink
                                 });
-                            console.log(event.attachments);
+                           
                         }
-                        console.log(events[i]);
+                        //console.log(events[i]);
                         myTreeData.push(event);
                     }
                     $scope.tree_data=myTreeData;
@@ -213,17 +187,34 @@
            /* console.log(this.calendarItems)
             var people= googlePlus.getPeople({'userId' : 'me' });    */
         }
+        $scope.editEvent = function(data)
+        {
+            var event = {
+                summary: '',
+                description: '',
+                start: {
+                    dateTime: '',
+                },
+                end: {
+                    dateTime: '',
+                   
+                },
+            };
+            event.summary = data.summary;
+            event.description = data.description;
+            //two-way binding didin't work with datetimepicker values, so I fixed it manually :(
+            event.start.dateTime = new Date(angular.element('#startDateTimePicker').val());
+            $scope.event.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
+            event.end.dateTime = new Date(angular.element('#endDateTimePicker').val());
+            $scope.event.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
+            googleCalendar.updateEvent({ calendarId: this.selectedCalendar.id, eventId: data.id, resource: event });
 
+        }
         function clearTable() {         
             $scope.tree_data = [];
             myTreeData = [];
         };
 
-        $scope.loadCalendars = function() {
-          googleCalendar.listCalendars().then(function (data) {
-              $scope.calendars = data;
-              $scope.selectedCalendar = $scope.calendars[0];
-            });
-        }
+     
        
     }]);

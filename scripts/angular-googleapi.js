@@ -49,7 +49,6 @@ angular.module('googleApi', [])
 
                     return deferred.promise;
                 },
-
                 handleAuthResult: function(authResult) {
                     if (authResult && !authResult.error) {
                         var data = {};

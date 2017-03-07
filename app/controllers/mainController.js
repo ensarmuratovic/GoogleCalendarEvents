@@ -62,7 +62,7 @@
                  clickView: function (data) {
 
                      $scope.event = data;
-                     console.log(data); 
+                     console.log(data);
                 }
             }
         }

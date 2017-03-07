@@ -1,24 +1,25 @@
 ﻿<!doctype html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Google Calendar Events</title>
+    <meta charset="utf-8">
+    <title>Google Calendar Events</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-   <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
+    <link href="style/ng-notify-custom.css" rel="stylesheet" />
     <link href="style/site.css" rel="stylesheet" />
     <link href="style/treeGrid.css" rel="stylesheet" />
     <link href="style/customLoadinBar.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
 </head>
-<body ng-app="eventsApp" ng-controller="mainCtrl" >
+<body ng-app="eventsApp" ng-controller="mainCtrl">
 
     <div class="main ng-cloak" ng-cloak>
         <div>
             <button class="btn btn-success" ng-show="!currentUser" ng-click="login()" style="position:fixed; top:50%; left:50%; width:100px;margin-left:-50px;">Login</button>
         </div>
-        <div class="container-fluid">
-            <div style="padding:0 0 15px 0;border-bottom-style:solid;border-width:thin;border-color:lightgray" ng-show="currentUser">
+        <div class="container-fluid" ng-show="currentUser">
+            <div style="padding:0 0 15px 0;border-bottom-style:solid;border-width:thin;border-color:lightgray" >
                 <h3>Wellcome {{currentUser.displayName}}!</h3>
                 <img ng-src="{{currentUser.image.url.replace('sz=50','sz=100')}}" class="img-rounded" alt="Google plus photo">
                 <div style="display:inline-block; margin-left:50px">
@@ -28,20 +29,22 @@
                 </div>
             </div>
             <br />
-            <div>
+            <div style="border-bottom-style:solid;border-width:thin;border-color:lightgray">
 
-                <div class="input-group" ng-show="currentUser">
+                <div class="input-group"  ng-show="currentUser" style="max-width:500px;float:left; margin-right:10px;margin-bottom:10px">
                     <span class="input-group-addon" id="basic-addon1">Choose calendar</span>
                     <select class="form-control" id="selectCalendar" name="calendar" ng-model="selectedCalendar" ng-options="cal as cal.summary for cal in calendars" ng-change="loadEvents()"></select>
+                    
                 </div>
-                <br />
+                <button type="button" class="btn btn-primary" aria-label="Left Align">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>Add new event
+                </button>
+                <br>
+                <br>
+                
 
-                <!-- <button class="btn btn-success" ng-click="loadCalendars()">Get Calendars</button>
-                <button class="btn btn-success" ng-click="loadEvents()">Get Calendar Entries</button>-->
             </div>
-            <!--<ul class="list-group">
-                   <li class="list-group-item" ng-repeat="item in calendarItems">{{item.summary}}</li>
-                 </ul>-->
+            <br />
             <div ng-show="currentUser">
                 <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handlerCV(branch)" expand-level="1" icon-expand="glyphicon glyphicon-chevron-right" icon-collapse="glyphicon glyphicon-chevron-down" icon-leaf="glyphicon glyphicon-globe"></tree-grid>
             </div>
@@ -180,7 +183,7 @@
                                 <div class="form-group row">
                                     <label for="title" class="col-xs-2 col-form-label">Title</label>
                                     <div class="col-xs-10">
-                                        <input class="form-control" id="title" type="text" value="" ng-model="event.summary">
+                                        <input class="form-control" id="title" type="text" value="" ng-model-options="{ updateOn: 'submit' }" ng-model="event.summary">
                                     </div>
                                 </div>
                                 <!--Creator-->
@@ -252,14 +255,41 @@
                         <div>
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-success" ng-click="editEvent(event)" data-dismiss="modal">Save</button>
-                                <button type="submit" class="btn btn-primary" data-dismiss="modal">Close</button>
+                                <button type="reset" ng-click="editEventForm.$rollbackViewValue();" class="btn btn-primary" data-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Delete Event Modal-->
+            <div id="deleteEventModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Delete Event</h4>
+                        </div>
+                        <div>
+                            <div class="modal-body ">
+                                <div class="text-center">
+                                    <div class="text-danger text-large"><h2>Are you sure you want to proceed with deletion of <span class="text-primary">{{event.summary}}</span> ?</h2></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-danger" ng-click="deleteEvent(event);" data-dismiss="modal">Yes</button>
+                                <button type="reset"  class="btn btn-primary" data-dismiss="modal">No</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(function () {
             $('#datetimepickerStart').datetimepicker();
@@ -271,17 +301,15 @@
     <script src="scripts/angular-googleapi.js"></script>
     <script src="https://apis.google.com/js/client.js"></script>
     <script src="scripts/tree-grid-directive.js"></script>
-
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="scripts/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
-
-   
+    <script src="http://cdn.jsdelivr.net/angular.ng-notify/0.6.0/ng-notify.min.js"></script>
     <!-- Load app main script -->
     <script src="app/app.js?v=2"></script>
     <script src="app/controllers/mainController.js"></script>
     <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js'></script>
- 
+
 </body>
 
 

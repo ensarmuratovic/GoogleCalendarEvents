@@ -1,4 +1,4 @@
-var app = angular.module('eventsApp', [ 'angular-loading-bar','googleApi', 'treeGrid']);
+var app = angular.module('eventsApp', ['angular-loading-bar', 'googleApi', 'treeGrid', 'ngNotify']);
 
 app.config(function(googleLoginProvider) {
     googleLoginProvider.configure({
@@ -13,4 +13,6 @@ app.config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
     cfpLoadingBarProvider.includeSpinner = true; // Show the spinner.
     cfpLoadingBarProvider.includeBar = true; // Show the bar.
 }]);
+
+
 

@@ -1,14 +1,20 @@
  'use strict';
- app.controller('mainCtrl', ['$scope', 'googleLogin', 'googleCalendar', 'googlePlus', 'cfpLoadingBar', function ($scope, googleLogin, googleCalendar, googlePlus, cfpLoadingBar) {
+ app.controller('mainCtrl', ['$scope', 'googleLogin', 'googleCalendar', 'googlePlus', 'cfpLoadingBar', 'ngNotify', function ($scope, googleLogin, googleCalendar, googlePlus, cfpLoadingBar, ngNotify) {
     
 
  
      $scope.tree_data = new Array();
  
      var myTreeData = new Array();
-
+     ngNotify.config({
+         theme: 'pure',
+         position: 'bottom',
+         duration: 1000,
+         sticky: false,
+         html: false,
+         target: '#modular'
+     });
      
-
      $scope.expanding_property = {
          field: "summary",
          displayName: "Title",
@@ -46,19 +52,14 @@
         {
             field: "Actions",
             displayName: "Actions",
-            cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#delEventModal'  >Delete</button>",
+            cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteEventModal'  >Delete</button>",
             cellTemplateScope: {
                  clickEdit: function (data) {
                      $scope.event = data;
                  },
-                 /*clickDel: function (branch) {
-                     $scope.delCr = branch;
-                     myCvService.GetCriteria(branch.criteria_id).then(function (response) {
-                         $scope.delCriteriaFull = response.data;
-                         $scope.delCriteria = $scope.editCriteriaFull.name;
-                         console.log($scope.editCriteriaFull.name);
-                     });
-                 },*/
+                 clickDel: function (branch) {
+                     $scope.event = branch;
+                 },
                  clickView: function (data) {
 
                      $scope.event = data;
@@ -77,13 +78,14 @@
               $scope.currentUser.image.url
             console.log(user);
             $scope.loadCalendars();
+            ngNotify.set('Welcome '+user.displayName+'!', 'success');
+    
           });
         })
 
          $scope.$on("google:ready", function() {
          //authorization after google api is loaded 
-             googleLogin.login().then(function (data) {
-                 cfpLoadingBar.complete();
+             googleLogin.login().then(function (data) {  
              });
           });
         
@@ -209,7 +211,25 @@
             $scope.event.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
             event.end.dateTime = new Date(angular.element('#endDateTimePicker').val());
             $scope.event.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
-            googleCalendar.updateEvent({ calendarId: this.selectedCalendar.id, eventId: data.id, resource: event });
+            googleCalendar.updateEvent({ calendarId: this.selectedCalendar.id, eventId: data.id, resource: event })
+                           .then(function (data) {
+                               ngNotify.set('Successfully updated event!', 'success');
+                           }, function (response) {
+                               console.log(response);
+                               ngNotify.set('Error while updating event due to: ' + response.message,{type:'error',duration:3000});
+                           });
+
+        }
+        $scope.deleteEvent= function(event)
+        {
+            googleCalendar.deleteEvent({ calendarId: this.selectedCalendar.id, eventId: event.id })
+                           .then(function (data) {
+                               ngNotify.set('Event deleted!', 'success');
+                               $scope.tree_data.pop($scope.event);
+                           }, function (response) {
+                               console.log(response);
+                               ngNotify.set('Event deletion failed due to: ' + response.message, { type: 'error', duration: 3000 });
+                           });
 
         }
         function clearTable() {         

@@ -4,7 +4,20 @@
 
  
      $scope.tree_data = new Array();
- 
+
+     $scope.newEvent = {
+         summary: '',
+         description: '',
+         startDateTime:'',
+         endDateTime:''
+     };
+     $scope.eventOld = {};
+
+     $scope.newEvent.startDateTime = moment(new Date()).format('MM/DD/YYYY h:mm A');
+     //initialy add one hour to end DateTime
+     var date = new Date();
+     date.setHours(date.getHours() + 1);
+     $scope.newEvent.endDateTime = moment(date).format('MM/DD/YYYY h:mm A');
      var myTreeData = new Array();
      ngNotify.config({
          theme: 'pure',
@@ -54,8 +67,14 @@
             displayName: "Actions",
             cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteEventModal'  >Delete</button>",
             cellTemplateScope: {
-                 clickEdit: function (data) {
+                clickEdit: function (data) {
+                    $scope.eventOld = {};
+                     angular.copy(data, $scope.eventOld);
+                    // $scope.eventOld = data;
                      $scope.event = data;
+
+                     angular.element('#startDateTimePicker').val(data.startDateTime);
+                     angular.element('#endDateTimePicker').val(data.endDateTime);
                  },
                  clickDel: function (branch) {
                      $scope.event = branch;
@@ -193,6 +212,8 @@
         }
         $scope.editEvent = function(data)
         {
+            console.log($scope.event);
+            
             var event = {
                 summary: '',
                 description: '',
@@ -203,14 +224,22 @@
                     dateTime: '',
                    
                 },
+                location:''
             };
             event.summary = data.summary;
             event.description = data.description;
+
+            $scope.event.summary = data.summary;
+            $scope.event.description = data.description;
+
             //two-way binding didin't work with datetimepicker values, so I fixed it manually :(
             event.start.dateTime = new Date(angular.element('#startDateTimePicker').val());
+            
             $scope.event.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
             event.end.dateTime = new Date(angular.element('#endDateTimePicker').val());
             $scope.event.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
+            if(data.location)
+                event.location = data.location;
             googleCalendar.updateEvent({ calendarId: this.selectedCalendar.id, eventId: data.id, resource: event })
                            .then(function (data) {
                                ngNotify.set('Successfully updated event!', 'success');
@@ -218,7 +247,15 @@
                                console.log(response);
                                ngNotify.set('Error while updating event due to: ' + response.message,{type:'error',duration:3000});
                            });
+           
 
+        }
+        $scope.cancelEdit = function()
+        {
+            //restore orignial values
+            angular.copy($scope.eventOld, $scope.event)
+    
+            console.log($scope.eventOld);
         }
         $scope.deleteEvent= function(event)
         {
@@ -230,6 +267,41 @@
                                console.log(response);
                                ngNotify.set('Event deletion failed due to: ' + response.message, { type: 'error', duration: 3000 });
                            });
+
+        }
+
+        $scope.addEvent = function (data) {
+           
+           
+            var event = {
+                summary: '',
+                description: '',
+                start: {
+                    dateTime: '',
+                },
+                end: {
+                    dateTime: '',
+                },
+            };
+
+            event.summary = data.summary;
+            event.description = data.description;
+            //two-way binding didin't work with datetimepicker values, so I fixed it manually :(
+            event.start.dateTime = new Date(angular.element('#startDateTimePickerNew').val());
+            //$scope.newEvent.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
+            event.start.dateTime = data.startDateTime;
+            // event.end.dateTime = new Date(angular.element('#endDateTimePickerNew').val());
+            event.end.dateTime = data.endDateTime;
+            //$scope.newEvent.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
+            console.log(event);
+            /*googleCalendar.insertEvent({calendarId: this.selectedCalendar.id, resource: event})
+                           .then(function (data) {
+                               ngNotify.set('Event deleted!', 'success');
+                               $scope.tree_data.pop($scope.event);
+                           }, function (response) {
+                               console.log(response);
+                               ngNotify.set('Event deletion failed due to: ' + response.message, { type: 'error', duration: 3000 });
+                           });*/
 
         }
         function clearTable() {         

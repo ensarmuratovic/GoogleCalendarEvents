@@ -15,8 +15,10 @@
 <body ng-app="eventsApp" ng-controller="mainCtrl">
 
     <div class="main ng-cloak" ng-cloak>
-        <div>
-            <button class="btn btn-success" ng-show="!currentUser" ng-click="login()" style="position:fixed; top:50%; left:50%; width:100px;margin-left:-50px;">Login</button>
+        <div style="margin:0 auto; position:absolute; top:40%;left:50%" ng-show="!currentUser">
+            <h3 style="margin:0 auto; margin-left:-90%;" class="text-center">Welcome to Google Calendar Manager</h3>
+            <br />
+            <button class="btn btn-success"  ng-click="login()" style="margin-left:-100px;">Login with Google Account</button>
         </div>
         <div class="container-fluid" ng-show="currentUser">
             <div style="padding:0 0 15px 0;border-bottom-style:solid;border-width:thin;border-color:lightgray" >

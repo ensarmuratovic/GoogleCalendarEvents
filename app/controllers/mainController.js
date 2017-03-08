@@ -13,11 +13,17 @@
      };
      $scope.eventOld = {};
 
-     $scope.newEvent.startDateTime = moment(new Date()).format('MM/DD/YYYY h:mm A');
-     //initialy add one hour to end DateTime
-     var date = new Date();
-     date.setHours(date.getHours() + 1);
-     $scope.newEvent.endDateTime = moment(date).format('MM/DD/YYYY h:mm A');
+     $scope.resetAddForm = function ()
+     {
+         $scope.newEvent.startDateTime = moment(new Date()).format('MM/DD/YYYY h:mm A');
+         //initialy add one hour to end DateTime
+         var date = new Date();
+         date.setHours(date.getHours() + 1);
+         $scope.newEvent.endDateTime = moment(date).format('MM/DD/YYYY h:mm A');
+         $scope.newEvent.summary = "";
+         $scope.newEvent.description = "";
+     }
+     $scope.resetAddForm();
      var myTreeData = new Array();
      ngNotify.config({
          theme: 'pure',
@@ -179,36 +185,6 @@
 
                      }
                 );
-           /*var event = {
-                          'summary': 'Nestoooooo',
-                          'location': '800 Howard St., San Francisco, CA 94103',
-                          'description': 'proba iz koda',
-                          'start': {
-                            'dateTime': '2017-02-28T09:00:00-07:00',
-                            'timeZone': 'America/Los_Angeles'
-                          },
-                          'end': {
-                            'dateTime': '2017-02-28T17:00:00-07:00',
-                            'timeZone': 'America/Los_Angeles'
-                          },
-                          'recurrence': [
-                            'RRULE:FREQ=DAILY;COUNT=2'
-                          ],
-                          'attendees': [
-                            {'email': 'lpage@example.com'},
-                            {'email': 'sbrin@example.com'}
-                          ],
-                          'reminders': {
-                            'useDefault': false,
-                            'overrides': [
-                              {'method': 'email', 'minutes': 24 * 60},
-                              {'method': 'popup', 'minutes': 10}
-                            ]
-                          }
-                        };
-                googleCalendar.insertEvent({calendarId: this.selectedCalendar.id, resource: event});*/
-           /* console.log(this.calendarItems)
-            var people= googlePlus.getPeople({'userId' : 'me' });    */
         }
         $scope.editEvent = function(data)
         {
@@ -250,15 +226,17 @@
            
 
         }
-        $scope.cancelEdit = function()
+        $scope.cancel = function()
         {
             //restore orignial values
             angular.copy($scope.eventOld, $scope.event)
-    
+
             console.log($scope.eventOld);
         }
         $scope.deleteEvent= function(event)
         {
+            console.log(event);
+            
             googleCalendar.deleteEvent({ calendarId: this.selectedCalendar.id, eventId: event.id })
                            .then(function (data) {
                                ngNotify.set('Event deleted!', 'success');
@@ -288,20 +266,61 @@
             event.description = data.description;
             //two-way binding didin't work with datetimepicker values, so I fixed it manually :(
             event.start.dateTime = new Date(angular.element('#startDateTimePickerNew').val());
-            //$scope.newEvent.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
-            event.start.dateTime = data.startDateTime;
-            // event.end.dateTime = new Date(angular.element('#endDateTimePickerNew').val());
-            event.end.dateTime = data.endDateTime;
-            //$scope.newEvent.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
+            $scope.newEvent.startDateTime = moment(event.start.dateTime).format('MM/DD/YYYY h:mm A');
+            event.end.dateTime = new Date(angular.element('#endDateTimePickerNew').val());
+            $scope.newEvent.endDateTime = moment(event.end.dateTime).format('MM/DD/YYYY h:mm A');
             console.log(event);
-            /*googleCalendar.insertEvent({calendarId: this.selectedCalendar.id, resource: event})
+            googleCalendar.insertEvent({calendarId: this.selectedCalendar.id, resource: event})
                            .then(function (data) {
-                               ngNotify.set('Event deleted!', 'success');
-                               $scope.tree_data.pop($scope.event);
+                               ngNotify.set('Event created!', 'success');
+                               console.log(data);
+                               var event = {
+                                   id: "",
+                                   summary: "",
+                                   creator: "",
+                                   startDateTime: "",
+                                   endDateTime: "",
+                                   created: "",
+                                   updated: "",
+                                   description: "",
+                                   location: "",
+                                   attachments: [],
+                                   htmlLink: ""
+                               }
+                               event.id = data.id;
+                               event.summary = data.summary;
+                               event.creator = data.creator.displayName;
+                               //for all-day events
+                               if (data.end.dateTime)
+                                   event.startDateTime = moment(data.start.dateTime).format('MM/DD/YYYY h:mm A');
+                               else
+                                   event.startDateTime = moment(data.start.date).format('MM/DD/YYYY');
+                               if (data.end.dateTime)
+                                   event.endDateTime = moment(data.end.dateTime).format('MM/DD/YYYY h:mm A');
+                               else
+                                   event.endDateTime = moment(data.end.date).format('MM/DD/YYYY');
+                               event.created = moment(data.created).format('MM/DD/YYYY h:mm A');
+                               event.updated = moment(data.updated).format('MM/DD/YYYY h:mm A');
+
+                               // console.log(moment(event.created).format());
+                               // console.log(events[i].created);
+                               event.description = data.description;
+                               event.location = data.location;
+                               event.htmlLink = data.htmlLink;
+
+                               if (data.attachments) {
+                                   for (var j = 0; j < data.attachments.length; j++)
+                                       event.attachments.push({
+                                           title: data.attachments[j].title,
+                                           fileUrl: data.attachments[j].fileUrl,
+                                           iconLink: data.attachments[j].iconLink
+                                       });
+                               }
+                               $scope.tree_data.push(event);
                            }, function (response) {
                                console.log(response);
-                               ngNotify.set('Event deletion failed due to: ' + response.message, { type: 'error', duration: 3000 });
-                           });*/
+                               ngNotify.set('Event creation failed due to: ' + response.message, { type: 'error', duration: 3000 });
+                           });
 
         }
         function clearTable() {         

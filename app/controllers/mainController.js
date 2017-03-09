@@ -75,17 +75,15 @@
                 clickEdit: function (data) {
                     $scope.eventOld = {};
                      angular.copy(data, $scope.eventOld);
-                    // $scope.eventOld = data;
                      $scope.event = data;
 
                      angular.element('#startDateTimePicker').val(data.startDateTime);
                      angular.element('#endDateTimePicker').val(data.endDateTime);
                  },
-                 clickDel: function (branch) {
-                     $scope.event = branch;
+                clickDel: function (data) {
+                     $scope.event = data;
                  },
                  clickView: function (data) {
-
                      $scope.event = data;
                 }
             }
@@ -225,12 +223,14 @@
 
             console.log($scope.eventOld);
         }
-        $scope.deleteEvent= function(event)
-        {          
-            googleCalendar.deleteEvent({ calendarId: this.selectedCalendar.id, eventId: event.id })
+        $scope.deleteEvent= function()
+        {
+           
+            googleCalendar.deleteEvent({ calendarId: this.selectedCalendar.id, eventId: $scope.event.id })
                            .then(function (data) {
                                ngNotify.set('Event deleted!', 'success');
-                               $scope.tree_data.pop($scope.event);
+                               var index = $scope.tree_data.indexOf($scope.event);
+                               $scope.tree_data.splice(index, 1);
                            }, function (response) {
                                console.log(response);
                                ngNotify.set('Event deletion failed due to: ' + response.message, { type: 'error', duration: 3000 });

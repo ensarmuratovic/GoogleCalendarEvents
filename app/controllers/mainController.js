@@ -127,9 +127,6 @@
             cfpLoadingBar.start();
              googleCalendar.listEvents({ calendarId: this.selectedCalendar.id })
                 .then(function (events) {
-                 //   $scope.calendarItems = events;
-                    //  console.log(events);
-                    //var data = events;
                     for(var i=0;i<events.length;i++)
                     {
                         console.log(events[i]);
@@ -161,8 +158,6 @@
                         event.created = moment(events[i].created).format('MM/DD/YYYY h:mm A');
                         event.updated = moment(events[i].updated).format('MM/DD/YYYY h:mm A');
 
-                       // console.log(moment(event.created).format());
-                       // console.log(events[i].created);
                         event.description = events[i].description;
                         event.location = events[i].location;
                         event.htmlLink = events[i].htmlLink;
@@ -176,7 +171,6 @@
                                 });
                            
                         }
-                        //console.log(events[i]);
                         myTreeData.push(event);
                     }
                     $scope.tree_data = myTreeData;
@@ -247,9 +241,7 @@
 
         }
 
-        $scope.addEvent = function (data) {
-           
-           
+        $scope.addEvent = function (data) {       
             var event = {
                 summary: '',
                 description: '',
@@ -289,7 +281,6 @@
                                event.id = data.id;
                                event.summary = data.summary;
                                event.creator = data.creator.displayName;
-                               //for all-day events
                                if (data.end.dateTime)
                                    event.startDateTime = moment(data.start.dateTime).format('MM/DD/YYYY h:mm A');
                                else
@@ -300,9 +291,6 @@
                                    event.endDateTime = moment(data.end.date).format('MM/DD/YYYY');
                                event.created = moment(data.created).format('MM/DD/YYYY h:mm A');
                                event.updated = moment(data.updated).format('MM/DD/YYYY h:mm A');
-
-                               // console.log(moment(event.created).format());
-                               // console.log(events[i].created);
                                event.description = data.description;
                                event.location = data.location;
                                event.htmlLink = data.htmlLink;
@@ -327,6 +315,4 @@
             myTreeData = [];
         };
 
-     
-       
     }]);

@@ -31,7 +31,7 @@
                             <div class="form-group">
                                 <div class='input-group date' id='datetimepickerStart'>
                                     <input id="startDateTimePicker" type='text' class="form-control" ng-model="event.startDateTime" required readonly />
-                                    <span class="input-group-addon">
+                                    <span class="input-group-addon" style="background-color:white">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
@@ -45,25 +45,16 @@
                             <div class="form-group">
                                 <div class='input-group date' id='datetimepickerEnd'>
                                     <input id="endDateTimePicker" type='text' class="form-control" ng-model="event.endDateTime" required readonly />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    <span class="input-group-addon" style="background-color:white" >
+                                        <span class="glyphicon glyphicon-calendar" ></span>
                                     </span>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    <!--Location-->
-                    <!--<div class="form-group row" ng-hide="{{event.location===undefined}}">
-                        <label for="location" class="col-xs-2 col-form-label">Location<i class='glyphicon glyphicon-pushpin' data-toggle='tooltip' title='Event location.'></i></label>
-                        <div class="col-xs-10">
-                            <input class="form-control" id="location" type="text" value="" ng-model="event.location" readonly>
-                        </div>
-                    </div>-->
-                    <!--Attachments-->
                 </div>
             </form>
-            <!-- ng-click="editEventForm.$rollbackViewValue();"-->
             <div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success" ng-click="editEvent(event)" data-dismiss="modal">Save</button>

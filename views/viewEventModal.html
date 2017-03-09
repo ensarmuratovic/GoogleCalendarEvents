@@ -13,14 +13,14 @@
                     <div class="form-group row" ng-show="event.summary">
                         <label for="title" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Title</label>
                         <div class="col-xs-10">
-                            <input class="form-control" id="title" type="text" value="" readonly ng-model="event.summary">
+                            <input class="form-control" id="title" type="text" value="" readonly ng-model="event.summary" style="background-color:white">
                         </div>
                     </div>
                     <!--Creator-->
                     <div class="form-group row">
                         <label for="creator" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Event creator</label>
                         <div class="col-xs-10">
-                            <input class="form-control" id="creator" readonly ng-model="event.creator">
+                            <input class="form-control" id="creator" readonly ng-model="event.creator" style="background-color:white">
                         </div>
                     </div>
 
@@ -28,42 +28,42 @@
                     <div class="form-group row" ng-show="event.description">
                         <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Note</label>
                         <div class="col-xs-10">
-                            <textarea class="form-control" id="description" rows="3" readonly ng-model="event.description"></textarea>
+                            <textarea class="form-control" id="description" rows="3" readonly ng-model="event.description" style="background-color:white"></textarea>
                         </div>
                     </div>
                     <!--StartDate-->
                     <div class="form-group row">
                         <label for="datetimepickerStart" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Starts on &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event starts.'></i></label>
                         <div class="col-xs-10">
-                            <input class="form-control" type="text" value="" ng-model="event.startDateTime" readonly>
+                            <input class="form-control" type="text" value="" ng-model="event.startDateTime" readonly style="background-color:white">
                         </div>
                     </div>
                     <!--EndDate-->
                     <div class="form-group row">
                         <label for="endDateTime" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Ends on &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event ends.'></i></label>
                         <div class="col-xs-10">
-                            <input class="form-control" type="text" value="" ng-model="event.endDateTime" readonly>
+                            <input class="form-control" type="text" value="" ng-model="event.endDateTime" readonly style="background-color:white">
                         </div>
                     </div>
                     <!--Location-->
                     <div class="form-group row" ng-show="event.location">
                         <label for="location" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Location &nbsp;<i class='glyphicon glyphicon-pushpin' data-toggle='tooltip' title='Event location.'></i></label>
                         <div class="col-xs-10">
-                            <input class="form-control" id="location" type="text" value="" ng-model="event.location" readonly>
+                            <input class="form-control" id="location" type="text" value="" ng-model="event.location" readonly style="background-color:white">
                         </div>
                     </div>
                     <!--Created-->
                     <div class="form-group row">
                         <label for="created" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Created &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event creation date.'></i></label>
                         <div class="col-xs-10">
-                            <input class="form-control" id="created" type="text" value="" ng-model="event.created" readonly>
+                            <input class="form-control" id="created" type="text" value="" ng-model="event.created" readonly style="background-color:white">
                         </div>
                     </div>
                     <!--Updated-->
                     <div class="form-group row" ng-show="event.updated">
                         <label for="updated" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Updated<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event updated.'></i></label>
                         <div class="col-xs-10">
-                            <input class="form-control" id="updated" type="text" value="" ng-model="event.updated" readonly>
+                            <input class="form-control" id="updated" type="text" value="" ng-model="event.updated" readonly style="background-color:white">
                         </div>
                     </div>
                     <!--Attachments-->

@@ -1,0 +1,96 @@
+﻿<div id="viewEventModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title ">Event details</h4>
+            </div>
+
+            <form name="viewEventForm" role="form">
+                <div class="modal-body">
+                    <!--Title-->
+                    <div class="form-group row" ng-show="event.summary">
+                        <label for="title" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Title</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" id="title" type="text" value="" readonly ng-model="event.summary">
+                        </div>
+                    </div>
+                    <!--Creator-->
+                    <div class="form-group row">
+                        <label for="creator" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Event creator</label>
+                        <div class="col-xs-10">
+                            <input class="form-control" id="creator" readonly ng-model="event.creator">
+                        </div>
+                    </div>
+
+                    <!--Description-->
+                    <div class="form-group row" ng-show="event.description">
+                        <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Note</label>
+                        <div class="col-xs-10">
+                            <textarea class="form-control" id="description" rows="3" readonly ng-model="event.description"></textarea>
+                        </div>
+                    </div>
+                    <!--StartDate-->
+                    <div class="form-group row">
+                        <label for="datetimepickerStart" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Starts on &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event starts.'></i></label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" value="" ng-model="event.startDateTime" readonly>
+                        </div>
+                    </div>
+                    <!--EndDate-->
+                    <div class="form-group row">
+                        <label for="endDateTime" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Ends on &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Date when event ends.'></i></label>
+                        <div class="col-xs-10">
+                            <input class="form-control" type="text" value="" ng-model="event.endDateTime" readonly>
+                        </div>
+                    </div>
+                    <!--Location-->
+                    <div class="form-group row" ng-show="event.location">
+                        <label for="location" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Location &nbsp;<i class='glyphicon glyphicon-pushpin' data-toggle='tooltip' title='Event location.'></i></label>
+                        <div class="col-xs-10">
+                            <input class="form-control" id="location" type="text" value="" ng-model="event.location" readonly>
+                        </div>
+                    </div>
+                    <!--Created-->
+                    <div class="form-group row">
+                        <label for="created" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Created &nbsp;<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event creation date.'></i></label>
+                        <div class="col-xs-10">
+                            <input class="form-control" id="created" type="text" value="" ng-model="event.created" readonly>
+                        </div>
+                    </div>
+                    <!--Updated-->
+                    <div class="form-group row" ng-show="event.updated">
+                        <label for="updated" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Updated<i class='glyphicon glyphicon-calendar' data-toggle='tooltip' title='Event updated.'></i></label>
+                        <div class="col-xs-10">
+                            <input class="form-control" id="updated" type="text" value="" ng-model="event.updated" readonly>
+                        </div>
+                    </div>
+                    <!--Attachments-->
+                    <div class="form-group row" data-ng-repeat="attachment in event.attachments" ng-show="event.attachments">
+                        <label for="attachments" ng-show="$first" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Attachments</label>
+                        <label class="col-xs-2 col-form-label" ng-show="$index>0"></label>
+                        <div class="col-xs-10">
+                            <label>Attachment {{$index+1}}</label>
+                            <p class="" style="width:auto" placeholder="Attachment title">{{attachment.title}}</p>
+                            <a href="{{attachment.fileUrl}}" class="btn btn-default" placeholder="Attachment url"> Download</a>
+                        </div>
+                    </div>
+                    <!--Html Link-->
+                    <div class="form-group row">
+                        <label for="htmlLink" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Event link<i data-toggle='tooltip' title='Event link.'></i></label>
+                        <div class="col-xs-10">
+                            <a class="btn btn-success" href="#" ng-href="{{event.htmlLink}}" target="_blank"> <span class="glyphicon glyphicon-link" aria-hidden="true"></span> </a>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+            <div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

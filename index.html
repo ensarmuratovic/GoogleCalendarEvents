@@ -207,7 +207,7 @@
                                     <div class="col-xs-10">
                                         <div class="form-group">
                                             <div class='input-group date' id='datetimepickerStart'>
-                                                <input id="startDateTimePicker" type='text' class="form-control" ng-model="event.startDateTime" required />
+                                                <input id="startDateTimePicker" type='text' class="form-control" ng-model="event.startDateTime" required readonly/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -221,7 +221,7 @@
                                     <div class="col-xs-10">
                                         <div class="form-group">
                                             <div class='input-group date' id='datetimepickerEnd'>
-                                                <input id="endDateTimePicker" type='text' class="form-control" ng-model="event.endDateTime" required />
+                                                <input id="endDateTimePicker" type='text' class="form-control" ng-model="event.endDateTime" required readonly />
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -283,7 +283,7 @@
                                     <div class="col-xs-10">
                                         <div class="form-group">
                                             <div class='input-group date' id='datetimepickerStartNew'>
-                                                <input id="startDateTimePickerNew" type='text' class="form-control" ng-model="newEvent.startDateTime" required  />
+                                                <input id="startDateTimePickerNew" type='text' class="form-control" ng-model="newEvent.startDateTime" required readonly />
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -297,7 +297,7 @@
                                     <div class="col-xs-10">
                                         <div class="form-group">
                                             <div class='input-group date' id='datetimepickerEndNew'>
-                                                <input id="endDateTimePickerNew" type='text' class="form-control" ng-model="newEvent.endDateTime" required />
+                                                <input id="endDateTimePickerNew" type='text' class="form-control" ng-model="newEvent.endDateTime" required readonly/>
                                                 <span class="input-group-addon">
                                                     <span class="glyphicon glyphicon-calendar"></span>
                                                 </span>
@@ -357,10 +357,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(function () {
-            $('#datetimepickerStart').datetimepicker();
-            $('#datetimepickerEnd').datetimepicker();
-            $('#datetimepickerStartNew').datetimepicker();
-            $('#datetimepickerEndNew').datetimepicker();
+            $('#datetimepickerStart').datetimepicker({
+                ignoreReadonly: true
+            });
+            $('#datetimepickerEnd').datetimepicker({
+                ignoreReadonly: true
+            });
+            $('#datetimepickerStartNew').datetimepicker({
+                ignoreReadonly: true
+            });
+            $('#datetimepickerEndNew').datetimepicker({
+                ignoreReadonly: true
+            });
            
     
         });

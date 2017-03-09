@@ -8,23 +8,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" />
     <link href="style/ng-notify-custom.css" rel="stylesheet" />
     <link href="style/site.css" rel="stylesheet" />
-    <link href="style/treeGrid.css" rel="stylesheet" />
+
     <link href="style/customLoadinBar.css" rel="stylesheet" />
 
 </head>
 <body ng-app="eventsApp" ng-controller="mainCtrl">
 
     <div class="main ng-cloak" ng-cloak>
-        <div style="margin:0 auto; position:absolute; top:40%;left:50%" ng-show="!currentUser">
-            <h3 style="margin:0 auto; margin-left:-90%;" class="text-center">Welcome to Google Calendar Manager</h3>
+        <div style="margin:0 auto; position:absolute; top:40%;left:50%; margin-left:-3%" ng-show="!currentUser">
+            <h3 style="margin:0 auto; margin-left:-100%;padding-left:10px" class="text-center">Welcome to Google Events Manager</h3>
             <br />
-            <button class="btn btn-success"  ng-click="login()" style="margin-left:-100px;">Login with Google Account</button>
+            <button class="btn btn-primary"  ng-click="login()" style="margin-left:-100px;"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;Login with Google Account</button>
+            <h6 style="margin:0 auto; margin-left:-100%; padding-left:15px" class="text-center"> Note: &nbsp; &nbsp; &nbsp; Allow pop-ups for auto login</h6>
         </div>
         <div class="container-fluid" ng-show="currentUser">
             <div style="padding:0 0 15px 0;border-bottom-style:solid;border-width:thin;border-color:lightgray" >
-                <h3>Wellcome {{currentUser.displayName}}!</h3>
-                <img ng-src="{{currentUser.image.url.replace('sz=50','sz=100')}}" class="img-rounded" alt="Google plus photo">
-                <div style="display:inline-block; margin-left:50px">
+                <h3>Welcome {{currentUser.displayName}}!</h3>
+                <img ng-src="{{currentUser.image.url.replace('sz=50','sz=100')}}" class="img-circle" alt="Google plus photo" style="margin-right:50px; margin-bottom:10px">
+                <div style="display:inline-block; ">
                     <p style="display:inline-block">Email: {{currentUser.emails[0].value}}</p>
                     <br>
                     <a href="" ng-href="{{currentUser.url}}" style="display:inline-block" placeholder="Google+ url" target="_blank"> Google+ Account</a>
@@ -33,12 +34,12 @@
             <br />
             <div style="border-bottom-style:solid;border-width:thin;border-color:lightgray">
 
-                <div class="input-group"  ng-show="currentUser" style="max-width:500px;float:left; margin-right:10px;margin-bottom:10px">
-                    <span class="input-group-addon" id="basic-addon1">Choose calendar</span>
+                <div class="input-group"  ng-show="currentUser" style="width:60%;float:left; margin-right:10px;margin-bottom:10px">
+                    <span class="input-group-addon" id="basic-addon1" >Choose calendar:</span>
                     <select class="form-control" id="selectCalendar" name="calendar" ng-model="selectedCalendar" ng-options="cal as cal.summary for cal in calendars" ng-change="loadEvents()"></select>
                     
                 </div>
-                <button type="button" class="btn btn-primary" aria-label="Left Align" data-toggle='modal' data-target='#addEventModal' ng-click="resetAddForm()">
+                <button type="button" class="btn btn-primary"  aria-label="Left Align" data-toggle='modal' data-target='#addEventModal' ng-click="resetAddForm()">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true" ></span>Add new event
                 </button>
                 <br>
@@ -50,14 +51,16 @@
             <div ng-show="currentUser">
                 <tree-grid tree-data="tree_data" tree-control="my_tree" col-defs="col_defs" expand-on="expanding_property" on-select="my_tree_handlerCV(branch)" expand-level="1" icon-expand="glyphicon glyphicon-chevron-right" icon-collapse="glyphicon glyphicon-chevron-down" icon-leaf="glyphicon glyphicon-globe"></tree-grid>
             </div>
+            <br />
+            <br />
             <!-- View Event Modal-->
             <div id="viewEventModal" class="modal fade" role="dialog" data-backdrop="static" data-keyboard="false">
                 <div class="modal-dialog">
                     <!-- Modal content-->
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header ">
                             <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title">Event details</h4>
+                            <h4 class="modal-title ">Event details</h4>
                         </div>
 
                         <form name="viewEventForm" role="form">
@@ -79,7 +82,7 @@
 
                                 <!--Description-->
                                 <div class="form-group row" ng-show="event.description">
-                                    <label for="description" class="col-xs-2 col-form-label"  style="text-align:right;padding-right:0px; padding-top:5px;">Description</label>
+                                    <label for="description" class="col-xs-2 col-form-label"  style="text-align:right;padding-right:0px; padding-top:5px;">Note</label>
                                     <div class="col-xs-10">
                                         <textarea class="form-control" id="description" rows="3" readonly ng-model="event.description"></textarea>
                                     </div>
@@ -150,9 +153,9 @@
                                 </div>
                                 <!--Html Link-->
                                 <div class="form-group row">
-                                    <label for="htmlLink" class="col-xs-2 col-form-label"  style="text-align:right;padding-right:0px; padding-top:5px;">Event link<i class='glyphicon glyphicon-link' data-toggle='tooltip' title='Event link.'></i></label>
+                                    <label for="htmlLink" class="col-xs-2 col-form-label"  style="text-align:right;padding-right:0px; padding-top:5px;">Event link<i  data-toggle='tooltip' title='Event link.'></i></label>
                                     <div class="col-xs-10">
-                                        <a id="htmlLink" href="" ng-href="{{event.htmlLink}}" target="_blank">Event URL</a>
+                                        <a class="btn btn-success" href="#" ng-href="{{event.htmlLink}}" target="_blank"> <span class="glyphicon glyphicon-link" aria-hidden="true"></span> </a>
                                     </div>
                                 </div>
 
@@ -190,17 +193,9 @@
                                         <input class="form-control" id="title" type="text" value="" ng-model="event.summary"  >
                                     </div>
                                 </div>
-                                <!--Creator-->
-                                <div class="form-group row">
-                                    <label for="creator" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Event creator</label>
-                                    <div class="col-xs-10">
-                                        <input class="form-control" id="creator" readonly ng-model="event.creator">
-                                    </div>
-                                </div>
-
                                 <!--Description-->
                                 <div class="form-group row">
-                                    <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Description</label>
+                                    <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Note</label>
                                     <div class="col-xs-10">
                                         <textarea class="form-control" id="description" rows="3" ng-model="event.description"></textarea>
                                     </div>
@@ -276,7 +271,7 @@
                                 </div>
                                 <!--Description-->
                                 <div class="form-group row">
-                                    <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Description</label>
+                                    <label for="description" class="col-xs-2 col-form-label" style="text-align:right;padding-right:0px; padding-top:5px;">Note</label>
                                     <div class="col-xs-10">
                                         <textarea class="form-control" id="description" rows="3" ng-model="newEvent.description"></textarea>
                                     </div>
@@ -333,7 +328,7 @@
                         <div>
                             <div class="modal-body ">
                                 <div class="text-center">
-                                    <div class="text-danger text-large"><h2>Are you sure you want to proceed with deletion of <span class="text-primary">{{event.summary}}</span> ?</h2></div>
+                                    <div class="text-danger text-large"><h4>Are you sure you want to proceed with deletion?</h4></div>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -346,6 +341,17 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+    <div class="footer-bottom" style="position:absolute; border-bottom-style:solid;border-top-style:solid; border-width:thin;border-color:lightgray; padding-top:5px" >
+        <div class="container">
+            <div class="row">
+                <div class="text-center">
+                    <div class="design">
+                        <p href="#" style="display:inline-block"> ©Ensar Muratovic </p> |  <a target="_blank" href="https://github.com/ensarmuratovic/">Github Account</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

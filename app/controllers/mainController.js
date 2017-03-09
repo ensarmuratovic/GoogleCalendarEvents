@@ -46,7 +46,7 @@
             field: "htmlLink",
             displayName: "Event link",
             sortable: true,
-            cellTemplate: "<span ng-switch='row.branch[col.field]'><a ng-switch-default ng-href='{{row.branch[col.field]}}'>URL</a></span>",
+            cellTemplate: "<span  ng-switch='row.branch[col.field]'><a class='btn btn-success' ng-switch-default ng-href='{{row.branch[col.field]}}' target='_blank'> <span class='glyphicon glyphicon-link' aria-hidden='true' ></span> </a></span>",
             sortingType: "number",
             filterable: true
         },
@@ -54,6 +54,7 @@
             field: "startDateTime",
             displayName: "Starts on",
             sortable: true,
+            cellTemplate: "<p style='display:inline !important' >{{row.branch[col.field]}}</p>",
             sortingType: "string"
         },
         {
@@ -63,15 +64,13 @@
             sortingType: "string"
         },
         {
-            field: "location",
-            displayName: "Location",
-            sortable: true,
-            sortingType: "string"
-        },
-        {
             field: "Actions",
             displayName: "Actions",
-            cellTemplate: "<button id='viewMe{{row.branch.id}}' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' >View</button>" + " " + "<button ng-click='cellTemplateScope.clickEdit(row.branch)' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' >Edit</button>" + " " + "<button ng-click='cellTemplateScope.clickDel(row.branch)' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteEventModal'  >Delete</button>",
+            cellTemplate: "<button id='viewMe{{row.branch.id}}' style='margin-bottom:3px' ng-click='cellTemplateScope.clickView(row.branch)' class='btn btn-primary btn-xs' data-toggle='modal' data-target='#viewEventModal' ><span class='glyphicon glyphicon-info-sign' aria-hidden='true' ></span> Details</button>" +
+                          " " +
+                          "<button ng-click='cellTemplateScope.clickEdit(row.branch)' style='margin-bottom:3px' class='btn btn-warning btn-xs' data-toggle='modal' data-target='#editEventModal' ><span class='glyphicon glyphicon-pencil' aria-hidden='true' ></span> Edit</button>" +
+                          " " +
+                          "<button ng-click='cellTemplateScope.clickDel(row.branch)' style='margin-bottom:3px' class='btn btn-danger btn-xs' data-toggle='modal' data-target='#deleteEventModal'  > <span class='glyphicon glyphicon-remove' aria-hidden='true' ></span> Delete</button>",
             cellTemplateScope: {
                 clickEdit: function (data) {
                     $scope.eventOld = {};

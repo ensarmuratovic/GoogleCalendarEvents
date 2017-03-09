@@ -87,7 +87,6 @@
                  clickView: function (data) {
 
                      $scope.event = data;
-                     console.log(data);
                 }
             }
         }
@@ -227,9 +226,7 @@
             console.log($scope.eventOld);
         }
         $scope.deleteEvent= function(event)
-        {
-            console.log(event);
-            
+        {          
             googleCalendar.deleteEvent({ calendarId: this.selectedCalendar.id, eventId: event.id })
                            .then(function (data) {
                                ngNotify.set('Event deleted!', 'success');
